@@ -1,8 +1,11 @@
 [package]
-name = "redisearch-api-rs"
+name = "redisearch_api"
 version = "0.1.0"
 authors = ["Gavrie Philipson <gavrie@redislabs.com>"]
 edition = "2018"
+
+#links = "redisearch"
+#build = "build.rs"
 
 [[example]]
 name = "hello_redisearch"
@@ -12,9 +15,10 @@ crate-type = ["cdylib"]
 bitflags = "1.1"
 libc = "0.2"
 time = "0.1"
-enum-primitive-derive = "^0.1"
-num-traits = "^0.2"
-#failure = "0.1"
+enum-primitive-derive = "0.1.2"
+num-traits = "0.2.8"
+
+redismodule = { path = "../redismodule-rs" }
 
 [build-dependencies]
 bindgen = "0.51"

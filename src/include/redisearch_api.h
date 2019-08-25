@@ -1,6 +1,7 @@
 #ifndef SRC_REDISEARCH_API_H_
 #define SRC_REDISEARCH_API_H_
 
+#include "redisearch_defines.h"
 #include "redismodule.h"
 #include <limits.h>
 
@@ -15,6 +16,12 @@ extern "C" {
 #else
 #define MODULE_API_FUNC(T, N) T N
 #endif
+
+/*
+MODULE_API_FUNC(int, RediSearch_GetCApiVersion)();
+int RediSearch_GetCApiVersion)();
+extern int (*RediSearch_GetCApiVersion)();
+*/
 
 typedef struct IndexSpec RSIndex;
 typedef size_t RSFieldID;

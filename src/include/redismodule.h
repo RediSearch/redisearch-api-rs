@@ -1,4 +1,4 @@
-#ifndef REDISMODULE_H
+ #ifndef REDISMODULE_H
 #define REDISMODULE_H
 
 #include <sys/types.h>
@@ -134,7 +134,8 @@ typedef struct RedisModuleTypeMethods {
   RedisModuleTypeFreeFunc free;
 } RedisModuleTypeMethods;
 
-#define REDISMODULE_API_FUNC(T, N) extern T(*N)
+//#define REDISMODULE_API_FUNC(T, N) extern T(*N)
+#define REDISMODULE_API_FUNC(T, N) T(*N)
 
 REDISMODULE_API_FUNC(int, RedisModule_GetApi)(const char *, void *);
 REDISMODULE_API_FUNC(void *, RedisModule_Alloc)(size_t bytes);
