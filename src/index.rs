@@ -82,28 +82,28 @@ impl Index {
     }
 
     pub fn search(&self, query_string: &str) -> Result<ResultsIterator, RedisError> {
-        /*
-         * Return an iterator over the results of the specified query string.
-         * @param[out] err: if not-NULL, will be set to the error message, if there is a
-         *  problem parsing the query
-         * @return an iterator over the results, or NULL if no iterator can be had
-         *  (see err, or no results).
-         */
-        debug!("Querying: '{}'", query_string);
-
         let c_query = CString::new(query_string).unwrap();
-        let mut err_buf = Vec::<u8>::with_capacity(1024);
+        let mut err_ptr = ptr::null_mut();
 
         let results_iter = unsafe {
             raw::RediSearch_IterateQuery(
                 self.inner,
                 c_query.as_ptr(),
                 query_string.len(),
-                &mut (err_buf.as_mut_ptr() as *mut c_char),
+                &mut err_ptr,
             )
         };
 
-        Ok(ResultsIterator::from_raw(results_iter, self, err_buf)?)
+        if !err_ptr.is_null() {
+            let err = unsafe { CStr::from_ptr(err_ptr) }.to_str()?.to_owned();
+
+            // FIXME: free() the err_ptr value.
+            // This should be exposed from the RediSearch API. Talk to Meir.
+
+            return Err(err.into());
+        }
+
+        Ok(ResultsIterator::from_raw(results_iter, self)?)
     }
 }
 
@@ -116,18 +116,7 @@ impl<'idx> ResultsIterator<'idx> {
     fn from_raw(
         results_iter: *mut RSResultsIterator,
         index: &'idx Index,
-        err_buf: Vec<u8>,
     ) -> Result<Self, RedisError> {
-        if results_iter.is_null() {
-            // Either we encountered an error, or there are no results.
-            let err = String::from_utf8(err_buf)?;
-
-            // TODO: This is quite ugly. There should be a nicer way to know if there was an error.
-            if err.len() > 0 {
-                return Err(err.into());
-            }
-        }
-
         Ok(Self {
             inner: results_iter,
             index,
@@ -167,6 +156,10 @@ impl Iterator for ResultsIterator<'_> {
 
 impl Drop for ResultsIterator<'_> {
     fn drop(&mut self) {
+        if self.inner.is_null() {
+            return;
+        }
+
         debug!("Freeing results iterator");
         unsafe {
             raw::RediSearch_ResultsIteratorFree(self.inner);
