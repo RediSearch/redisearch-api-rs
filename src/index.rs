@@ -110,7 +110,6 @@ impl Index {
 pub struct ResultsIterator<'idx> {
     inner: *mut RSResultsIterator,
     index: &'idx Index,
-    is_empty: bool,
 }
 
 impl<'idx> ResultsIterator<'idx> {
@@ -119,8 +118,6 @@ impl<'idx> ResultsIterator<'idx> {
         index: &'idx Index,
         err_buf: Vec<u8>,
     ) -> Result<Self, RedisError> {
-        let mut is_empty = false;
-
         if results_iter.is_null() {
             // Either we encountered an error, or there are no results.
             let err = String::from_utf8(err_buf)?;
@@ -129,15 +126,11 @@ impl<'idx> ResultsIterator<'idx> {
             if err.len() > 0 {
                 return Err(err.into());
             }
-
-            // No results.
-            is_empty = true;
         }
 
         Ok(Self {
             inner: results_iter,
             index,
-            is_empty,
         })
     }
 }
@@ -146,7 +139,8 @@ impl Iterator for ResultsIterator<'_> {
     type Item = String;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.is_empty {
+        if self.inner.is_null() {
+            // A null pointer means we have no results.
             return None;
         }
 
