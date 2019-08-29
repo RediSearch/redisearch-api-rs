@@ -12,3 +12,5 @@ Cargo.lock
 /.idea
 src/raw/bindings.rs
 libredisearch.a
+
+.vscode/
