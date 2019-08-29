@@ -17,8 +17,7 @@ libc = "0.2"
 time = "0.1"
 enum-primitive-derive = "0.1.2"
 num-traits = "0.2.8"
-
-redismodule = { git = "https://github.com/RedisLabsModules/redismodule-rs.git", branch = "master" }
+redismodule = { git = "https://github.com/RedisLabsModules/redismodule-rs.git", rev = "a070329" }
 
 [build-dependencies]
 bindgen = "0.51"
