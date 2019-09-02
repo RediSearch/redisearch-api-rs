@@ -25,7 +25,7 @@ macro_rules! debug {
 
 impl Index {
     pub fn create(name: &str) -> Self {
-        // debug!("Creating index '{}'", name);
+        debug!("Creating index '{}'", name);
 
         let name = CString::new(name).unwrap();
         let index = unsafe { raw::RediSearch_CreateIndex(name.as_ptr(), ptr::null()) };
@@ -33,7 +33,7 @@ impl Index {
     }
 
     pub fn create_with_options(name: &str, options: &IndexOptions) -> Self {
-        // debug!("Creating index with options '{}'", name);
+        debug!("Creating index with options '{}'", name);
         let index_options =
             unsafe { raw::RediSearch_CreateIndexOptions().as_mut() }.expect("null IndexOptions");
 
@@ -48,7 +48,7 @@ impl Index {
     }
 
     pub fn create_field(&self, name: &str) -> Field {
-        // debug!("Creating index field '{}'", name);
+        debug!("Creating index field '{}'", name);
         let name = CString::new(name).unwrap();
 
         let ftype = raw::RSFLDTYPE_FULLTEXT;
@@ -64,7 +64,7 @@ impl Index {
     }
 
     pub fn add_document(&self, doc: &Document) -> Result<(), RedisError> {
-        // debug!("Adding document to index");
+        debug!("Adding document to index");
         let status = unsafe {
             raw::RediSearch_IndexAddDocument(
                 self.inner,
@@ -133,7 +133,7 @@ impl Iterator for ResultsIterator<'_> {
             return None;
         }
 
-     //   debug!("Getting next result");
+        debug!("Getting next result");
 
         let mut len = 0usize;
         let key = unsafe {
@@ -160,7 +160,7 @@ impl Drop for ResultsIterator<'_> {
             return;
         }
 
-        // debug!("Freeing results iterator");
+        debug!("Freeing results iterator");
         unsafe {
             raw::RediSearch_ResultsIteratorFree(self.inner);
         };
