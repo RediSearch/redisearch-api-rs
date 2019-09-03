@@ -7,6 +7,9 @@ jobs:
 
     steps:
       - checkout
+      - run: git submodule sync
+      - run: git submodule update --init
+
       - run:
           name: Version information
           command: rustc --version; cargo --version; rustup --version
