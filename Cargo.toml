@@ -21,4 +21,4 @@ redismodule = { git = "https://github.com/RedisLabsModules/redismodule-rs.git", 
 
 [build-dependencies]
 bindgen = "0.51"
-cc = "1.0"
+cmake = "0.1"
