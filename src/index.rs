@@ -4,7 +4,7 @@ use std::ptr;
 use num_traits::ToPrimitive;
 
 use crate::raw::{self, RSFieldID, RSResultsIterator, GC_POLICY_FORK, GC_POLICY_NONE};
-use crate::Document;
+use crate::{Document, FieldType};
 use redismodule::RedisError;
 use std::os::raw::c_char;
 
@@ -51,11 +51,12 @@ impl Index {
         debug!("Creating index field '{}'", name);
         let name = CString::new(name).unwrap();
 
-        let ftype = raw::RSFLDTYPE_FULLTEXT;
+        // We want to let the document decide the type, so we support all types.
+        let ftype = FieldType::FULLTEXT | FieldType::NUMERIC | FieldType::TAG;
         let fopt = raw::RSFLDOPT_NONE;
 
         let field_id =
-            unsafe { raw::RediSearch_CreateField(self.inner, name.as_ptr(), ftype, fopt) };
+            unsafe { raw::RediSearch_CreateField(self.inner, name.as_ptr(), ftype.bits, fopt) };
 
         Field {
             index: self,

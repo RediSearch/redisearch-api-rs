@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate redismodule;
 
-use redisearch_api::{self, init, Document, Index};
+use redisearch_api::{self, init, Document, FieldType, Index};
 use redismodule::{Context, NextArg, RedisError, RedisResult};
 
 fn hello_redisearch(_: &Context, args: Vec<String>) -> RedisResult {
@@ -24,11 +24,11 @@ fn hello_redisearch(_: &Context, args: Vec<String>) -> RedisResult {
     index.create_field(field_name);
 
     let doc = Document::create("doc1", score);
-    doc.add_field(field_name, "bar");
+    doc.add_field(field_name, "bar", FieldType::FULLTEXT);
     index.add_document(&doc)?;
 
     let doc2 = Document::create("doc2", score);
-    doc2.add_field(field_name, "quux");
+    doc2.add_field(field_name, "quux", FieldType::FULLTEXT);
     index.add_document(&doc2)?;
 
     let keys: Vec<_> = index.search(search_term.as_str())?.collect();

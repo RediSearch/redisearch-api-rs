@@ -1,6 +1,9 @@
 use std::os::raw::c_int;
 
 #[macro_use]
+extern crate bitflags;
+
+#[macro_use]
 extern crate enum_primitive_derive;
 
 use redismodule::raw as rawmod;
@@ -11,6 +14,15 @@ pub mod raw;
 
 pub use document::Document;
 pub use index::Index;
+
+bitflags! {
+    pub struct FieldType: u32 {
+        const FULLTEXT = raw::RSFLDTYPE_FULLTEXT;
+        const NUMERIC = raw::RSFLDTYPE_NUMERIC;
+        const GEO = raw::RSFLDTYPE_GEO;
+        const TAG = raw::RSFLDTYPE_TAG;
+    }
+}
 
 pub fn get_c_api_version() -> i32 {
     unsafe { raw::RediSearch_GetCApiVersion() }
