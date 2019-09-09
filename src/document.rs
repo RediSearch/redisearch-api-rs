@@ -2,7 +2,7 @@ use std::ffi::CString;
 use std::os::raw::c_void;
 use std::ptr;
 
-use crate::raw;
+use crate::{raw, FieldType};
 
 pub struct Document {
     pub(crate) inner: *mut raw::RSDoc,
@@ -20,7 +20,7 @@ impl Document {
         Self { inner: doc }
     }
 
-    pub fn add_field(&self, name: &str, value: &str) {
+    pub fn add_field(&self, name: &str, value: &str, field_type: FieldType) {
         let name = CString::new(name).unwrap();
         let c_value = CString::new(value).unwrap();
         unsafe {
@@ -29,7 +29,7 @@ impl Document {
                 name.as_ptr(),
                 c_value.as_ptr(),
                 value.len(),
-                raw::RSFLDTYPE_FULLTEXT,
+                field_type.bits,
             );
         }
     }
