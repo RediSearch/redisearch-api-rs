@@ -17,7 +17,11 @@ libc = "0.2"
 time = "0.1"
 enum-primitive-derive = "0.1.2"
 num-traits = "0.2.8"
-redismodule = { git = "https://github.com/RedisLabsModules/redismodule-rs.git", branch = "master" }
+
+[dependencies.redismodule]
+git = "https://github.com/redislabsmodules/redismodule-rs.git"
+branch = "master"
+features = ["experimental-api"] # Required by RediSearch
 
 [build-dependencies]
 bindgen = "0.51"
