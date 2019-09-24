@@ -20,7 +20,7 @@ num-traits = "0.2.8"
 
 [dependencies.redismodule]
 git = "https://github.com/redislabsmodules/redismodule-rs.git"
-branch = "master"
+branch = "safe_context_rm_call"
 features = ["experimental-api"] # Required by RediSearch
 
 [build-dependencies]
