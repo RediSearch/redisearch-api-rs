@@ -17,23 +17,14 @@ pub struct Field<'a> {
     field_id: RSFieldID,
 }
 
-macro_rules! debug {
-    ($($arg:tt)*) => ({
-        println!($($arg)*);
-    })
-}
-
 impl Index {
     pub fn create(name: &str) -> Self {
-        debug!("Creating index '{}'", name);
-
         let name = CString::new(name).unwrap();
         let index = unsafe { raw::RediSearch_CreateIndex(name.as_ptr(), ptr::null()) };
         Self { inner: index }
     }
 
     pub fn create_with_options(name: &str, options: &IndexOptions) -> Self {
-        debug!("Creating index with options '{}'", name);
         let index_options =
             unsafe { raw::RediSearch_CreateIndexOptions().as_mut() }.expect("null IndexOptions");
 
@@ -48,7 +39,6 @@ impl Index {
     }
 
     pub fn create_field(&self, name: &str) -> Field {
-        debug!("Creating index field '{}'", name);
         let name = CString::new(name).unwrap();
 
         // We want to let the document decide the type, so we support all types.
@@ -65,7 +55,6 @@ impl Index {
     }
 
     pub fn add_document(&self, doc: &Document) -> Result<(), RedisError> {
-        debug!("Adding document to index");
         let status = unsafe {
             raw::RediSearch_IndexAddDocument(
                 self.inner,
@@ -133,9 +122,6 @@ impl Iterator for ResultsIterator<'_> {
             // A null pointer means we have no results.
             return None;
         }
-
-        debug!("Getting next result");
-
         let mut len = 0usize;
         let key = unsafe {
             let raw_key =
@@ -160,8 +146,6 @@ impl Drop for ResultsIterator<'_> {
         if self.inner.is_null() {
             return;
         }
-
-        debug!("Freeing results iterator");
         unsafe {
             raw::RediSearch_ResultsIteratorFree(self.inner);
         };
