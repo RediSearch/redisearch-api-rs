@@ -3,5 +3,7 @@
 #![allow(non_snake_case)]
 #![allow(dead_code)]
 
-mod bindings;
+pub mod bindings {
+    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
+}
 pub use self::bindings::*;
