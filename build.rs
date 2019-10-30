@@ -11,7 +11,7 @@ fn main() {
         .whitelist_var("(RS|RediSearch|REDISEARCH_|GC_POLICY).*")
         .whitelist_function("RediSearch.*")
         .blacklist_item("RedisModule.*")
-        .raw_line("use redismodule::raw::{RedisModuleCtx, RedisModuleString};")
+        .raw_line("use redis_module::raw::{RedisModuleCtx, RedisModuleString};")
         .generate()
         .expect("error generating RediSearch bindings");
 
