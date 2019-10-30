@@ -1,6 +1,8 @@
 extern crate bindgen;
 
 use cmake::Config;
+use std::env;
+use std::path::PathBuf;
 
 fn main() {
     // Generate bindings for RediSearch
@@ -15,9 +17,10 @@ fn main() {
         .generate()
         .expect("error generating RediSearch bindings");
 
+    let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
     bindings
-        .write_to_file("src/raw/bindings.rs")
-        .expect("failed to write RediSearch bindings to file");
+        .write_to_file(out_path.join("bindings.rs"))
+        .expect("failed to write bindings to file");
 
     // Find and link statically to libredisearch.a
     // TODO: Consider splitting the low level libredisearch wrapper off into a separate `-sys` crate.
