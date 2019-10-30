@@ -1,6 +1,8 @@
 [![license](https://img.shields.io/github/license/RediSearch/redisearch-api-rs.svg)](https://github.com/RediSearch/redisearch-api-rs)
 [![GitHub issues](https://img.shields.io/github/release/RediSearch/redisearch-api-rs.svg)](https://github.com/RediSearch/redisearch-api-rs/releases/latest)
 [![CircleCI](https://circleci.com/gh/RediSearch/redisearch-api-rs/tree/master.svg?style=svg)](https://circleci.com/gh/RediSearch/redisearch-api-rs/tree/master)
+[![Mailing List](https://img.shields.io/badge/Mailing%20List-RediSearch-blue)](https://groups.google.com/forum/#!forum/redisearch)
+[![Gitter](https://badges.gitter.im/RedisLabs/RediSearch.svg)](https://gitter.im/RedisLabs/RediSearch?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 # redisearch-api-rs
 
