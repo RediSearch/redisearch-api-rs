@@ -6,7 +6,7 @@ extern crate bitflags;
 #[macro_use]
 extern crate enum_primitive_derive;
 
-use redismodule::raw as rawmod;
+use redis_module::raw as rawmod;
 
 mod document;
 mod index;
@@ -29,7 +29,7 @@ pub fn get_c_api_version() -> i32 {
 }
 
 pub extern "C" fn init(raw_ctx: *mut rawmod::RedisModuleCtx) -> c_int {
-    let ctx = redismodule::Context::new(raw_ctx);
+    let ctx = redis_module::Context::new(raw_ctx);
     ctx.log_debug("Initializing RediSearch...");
 
     let result = unsafe { raw::RediSearch_Init(raw_ctx, raw::REDISEARCH_INIT_LIBRARY as c_int) };

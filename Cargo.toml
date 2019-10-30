@@ -18,9 +18,9 @@ time = "0.1"
 enum-primitive-derive = "0.1.2"
 num-traits = "0.2.8"
 
-[dependencies.redismodule]
+[dependencies.redis-module]
 git = "https://github.com/redislabsmodules/redismodule-rs.git"
-branch = "safe_context_rm_call"
+branch = "master"
 features = ["experimental-api"] # Required by RediSearch
 
 [build-dependencies]

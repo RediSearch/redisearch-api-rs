@@ -5,7 +5,7 @@ use num_traits::ToPrimitive;
 
 use crate::raw::{self, RSFieldID, RSResultsIterator, GC_POLICY_FORK, GC_POLICY_NONE};
 use crate::{Document, FieldType};
-use redismodule::RedisError;
+use redis_module::RedisError;
 use std::os::raw::c_char;
 
 pub struct Index {
@@ -64,7 +64,7 @@ impl Index {
             )
         };
 
-        if status == redismodule::raw::REDISMODULE_ERR as i32 {
+        if status == redis_module::raw::REDISMODULE_ERR as i32 {
             Err(RedisError::Str("error adding document"))
         } else {
             Ok(())
