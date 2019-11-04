@@ -10,7 +10,4 @@ Cargo.lock
 **/*.rs.bk
 
 /.idea
-src/raw/bindings.rs
-libredisearch.a
-
 .vscode/
