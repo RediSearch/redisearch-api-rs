@@ -27,6 +27,7 @@ fn main() {
 
     let mut dst = Config::new("RediSearch")
         .define("RS_BUILD_STATIC", "ON")
+        .define("GIT_DESCRIBE_VERSION", "0.0.0")
         .build_target("redisearchS")
         .build();
 
