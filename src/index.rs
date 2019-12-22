@@ -1,3 +1,4 @@
+use std::ffi::c_void;
 use std::ffi::{CStr, CString};
 use std::ptr;
 
@@ -66,6 +67,22 @@ impl Index {
 
         if status == redis_module::raw::REDISMODULE_ERR as i32 {
             Err(RedisError::Str("error adding document"))
+        } else {
+            Ok(())
+        }
+    }
+
+    pub fn del_document(&self, key: &str) -> Result<(), RedisError> {
+        let status = unsafe {
+            raw::RediSearch_DeleteDocument(
+                self.inner,
+                CString::new(key).unwrap().as_ptr() as *const c_void,
+                key.len(),
+            )
+        };
+
+        if status == redis_module::raw::REDISMODULE_ERR as i32 {
+            Err(RedisError::Str("error deleting document"))
         } else {
             Ok(())
         }
