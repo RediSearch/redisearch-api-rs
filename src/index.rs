@@ -9,13 +9,13 @@ use crate::{Document, FieldType};
 use redis_module::RedisError;
 use std::os::raw::c_char;
 
-pub struct Index {
-    inner: *mut raw::RSIndex,
-}
-
 pub struct Field<'a> {
     index: &'a Index,
     field_id: RSFieldID,
+}
+
+pub struct Index {
+    inner: *mut raw::RSIndex,
 }
 
 impl Index {
@@ -39,7 +39,7 @@ impl Index {
         Self { inner: index }
     }
 
-    pub fn create_field(&self, name: &str) -> Field {
+    pub fn create_field(&self, name: &str, weight: f64, tag_seperator: Option<i8>, tag_case_sensitive: bool) -> Field {
         let name = CString::new(name).unwrap();
 
         // We want to let the document decide the type, so we support all types.
@@ -48,6 +48,15 @@ impl Index {
 
         let field_id =
             unsafe { raw::RediSearch_CreateField(self.inner, name.as_ptr(), ftype.bits, fopt) };
+        unsafe { 
+            raw::RediSearch_TextFieldSetWeight(self.inner, field_id, weight); 
+            if let Some(sperator) = tag_seperator {
+                raw::RediSearch_TagFieldSetSeparator(self.inner, field_id, sperator); 
+            }
+            if tag_case_sensitive {
+                raw::RediSearch_TagFieldSetCaseSensitive(self.inner, field_id, tag_case_sensitive as i32); 
+            }
+        }
 
         Field {
             index: self,
