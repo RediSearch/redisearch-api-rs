@@ -21,7 +21,7 @@ fn hello_redisearch(_: &Context, args: Vec<String>) -> RedisResult {
     let score = 1.0;
 
     let index = Index::create(index_name);
-    index.create_field(field_name);
+    index.create_field(field_name, 1.0, None, false);
 
     let doc = Document::create("doc1", score);
     doc.add_field(field_name, "bar", FieldType::FULLTEXT);
