@@ -123,6 +123,12 @@ impl Index {
     }
 }
 
+impl Drop for Index {
+    fn drop(&mut self) {
+        unsafe { raw::RediSearch_DropIndex(self.inner) }
+    }
+}
+
 pub struct ResultsIterator<'idx> {
     inner: *mut RSResultsIterator,
     index: &'idx Index,
