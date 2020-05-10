@@ -18,6 +18,11 @@ pub struct Index {
     inner: *mut raw::RSIndex,
 }
 
+pub struct TagOptions {
+    tag_separator: Option<char>,
+    tag_case_sensitive: bool,
+}
+
 impl Index {
     pub fn create(name: &str) -> Self {
         let name = CString::new(name).unwrap();
@@ -39,7 +44,7 @@ impl Index {
         Self { inner: index }
     }
 
-    pub fn create_field(&self, name: &str, weight: f64, tag_seperator: Option<i8>, tag_case_sensitive: bool) -> Field {
+    pub fn create_field(&self, name: &str, weight: f64, tag_options: Option<&TagOptions>) -> Field {
         let name = CString::new(name).unwrap();
 
         // We want to let the document decide the type, so we support all types.
@@ -48,13 +53,19 @@ impl Index {
 
         let field_id =
             unsafe { raw::RediSearch_CreateField(self.inner, name.as_ptr(), ftype.bits, fopt) };
-        unsafe { 
-            raw::RediSearch_TextFieldSetWeight(self.inner, field_id, weight); 
-            if let Some(sperator) = tag_seperator {
-                raw::RediSearch_TagFieldSetSeparator(self.inner, field_id, sperator); 
-            }
-            if tag_case_sensitive {
-                raw::RediSearch_TagFieldSetCaseSensitive(self.inner, field_id, tag_case_sensitive as i32); 
+        unsafe {
+            raw::RediSearch_TextFieldSetWeight(self.inner, field_id, weight);
+            if let Some(options) = tag_options {
+                if let Some(sperator) = options.tag_separator {
+                    raw::RediSearch_TagFieldSetSeparator(self.inner, field_id, sperator as i8);
+                }
+                if options.tag_case_sensitive {
+                    raw::RediSearch_TagFieldSetCaseSensitive(
+                        self.inner,
+                        field_id,
+                        options.tag_case_sensitive as i32,
+                    );
+                }
             }
         }
 
