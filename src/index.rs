@@ -7,7 +7,7 @@ use num_traits::ToPrimitive;
 use crate::raw::{self, RSFieldID, RSResultsIterator, GC_POLICY_FORK, GC_POLICY_NONE};
 use crate::{Document, FieldType};
 use redis_module::RedisError;
-use std::os::raw::c_char;
+use std::os::raw::{c_char, c_int};
 
 pub struct Field<'a> {
     index: &'a Index,
@@ -21,6 +21,15 @@ pub struct Index {
 pub struct TagOptions {
     tag_separator: Option<char>,
     tag_case_sensitive: bool,
+}
+
+impl Default for TagOptions {
+    fn default() -> Self {
+        Self {
+            tag_separator: Option::None,
+            tag_case_sensitive: false,
+        }
+    }
 }
 
 impl Index {
@@ -44,7 +53,7 @@ impl Index {
         Self { inner: index }
     }
 
-    pub fn create_field(&self, name: &str, weight: f64, tag_options: Option<&TagOptions>) -> Field {
+    pub fn create_field(&self, name: &str, weight: f64, tag_options: &TagOptions) -> Field {
         let name = CString::new(name).unwrap();
 
         // We want to let the document decide the type, so we support all types.
@@ -55,17 +64,15 @@ impl Index {
             unsafe { raw::RediSearch_CreateField(self.inner, name.as_ptr(), ftype.bits, fopt) };
         unsafe {
             raw::RediSearch_TextFieldSetWeight(self.inner, field_id, weight);
-            if let Some(options) = tag_options {
-                if let Some(sperator) = options.tag_separator {
-                    raw::RediSearch_TagFieldSetSeparator(self.inner, field_id, sperator as i8);
-                }
-                if options.tag_case_sensitive {
-                    raw::RediSearch_TagFieldSetCaseSensitive(
-                        self.inner,
-                        field_id,
-                        options.tag_case_sensitive as i32,
-                    );
-                }
+            if let Some(sperator) = tag_options.tag_separator {
+                raw::RediSearch_TagFieldSetSeparator(self.inner, field_id, sperator as c_char);
+            }
+            if tag_options.tag_case_sensitive {
+                raw::RediSearch_TagFieldSetCaseSensitive(
+                    self.inner,
+                    field_id,
+                    tag_options.tag_case_sensitive as c_int,
+                );
             }
         }
 
