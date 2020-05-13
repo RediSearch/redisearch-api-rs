@@ -1,8 +1,8 @@
 #[macro_use]
 extern crate redis_module;
 
-use redis_module::{Context, NextArg, RedisError, RedisResult};
-use redisearch_api::{self, init, Document, FieldType, Index};
+use redis_module::{Context, NextArg, RedisResult};
+use redisearch_api::{self, Document, FieldType, Index};
 
 fn hello_redisearch(_: &Context, args: Vec<String>) -> RedisResult {
     let mut args = args.into_iter().skip(1);
@@ -42,6 +42,6 @@ redis_module! {
     data_types: [],
     init: init,
     commands: [
-        ["hello_redisearch", hello_redisearch, ""],
+        ["hello_redisearch", hello_redisearch, "readonly", 1, 1, 1],
     ],
 }
