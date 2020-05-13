@@ -12,6 +12,7 @@ readme = "README.md"
 name = "hello_redisearch"
 crate-type = ["cdylib"]
 
+
 [dependencies]
 redis-module = { version="0.9.0", features = ["experimental-api"]}
 bitflags = "1.1"
@@ -24,3 +25,8 @@ num-traits = "0.2.8"
 bindgen = "0.51"
 cmake = "0.1"
 
+[features]
+# Workaround to allow cfg(feature = "test") in redismodue-rs dependencies:
+# https://github.com/RedisLabsModules/redismodule-rs/pull/68
+# This requires running the tests with `--features test`
+test = ["redis-module/test"]
