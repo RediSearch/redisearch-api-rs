@@ -42,6 +42,6 @@ redis_module! {
     data_types: [],
     init: init,
     commands: [
-        ["hello_redisearch", hello_redisearch, ""],
+        ["hello_redisearch", hello_redisearch, "readonly", 1, 1, 1],
     ],
 }
