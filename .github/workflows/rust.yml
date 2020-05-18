@@ -14,7 +14,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install dependencies
-      run: brew install llvm
+      run: |
+        brew install llvm
+        rustup component add rustfmt --toolchain stable-x86_64-apple-darwin
     - name: Build
       run: cargo build --all --all-targets
     - name: Run tests
