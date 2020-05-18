@@ -53,7 +53,7 @@ impl Index {
         Self { inner: index }
     }
 
-    pub fn create_field(&self, name: &str, weight: f64, tag_options: &TagOptions) -> Field {
+    pub fn create_field(&self, name: &str, weight: f64, tag_options: TagOptions) -> Field {
         let name = CString::new(name).unwrap();
 
         // We want to let the document decide the type, so we support all types.
