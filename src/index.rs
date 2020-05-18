@@ -26,7 +26,7 @@ pub struct TagOptions {
 impl Default for TagOptions {
     fn default() -> Self {
         Self {
-            tag_separator: Option::None,
+            tag_separator: None,
             tag_case_sensitive: false,
         }
     }
@@ -39,7 +39,7 @@ impl Index {
         Self { inner: index }
     }
 
-    pub fn create_with_options(name: &str, options: &IndexOptions) -> Self {
+    pub fn create_with_options(name: &str, options: IndexOptions) -> Self {
         let index_options =
             unsafe { raw::RediSearch_CreateIndexOptions().as_mut() }.expect("null IndexOptions");
 
@@ -64,8 +64,8 @@ impl Index {
             unsafe { raw::RediSearch_CreateField(self.inner, name.as_ptr(), ftype.bits, fopt) };
         unsafe {
             raw::RediSearch_TextFieldSetWeight(self.inner, field_id, weight);
-            if let Some(sperator) = tag_options.tag_separator {
-                raw::RediSearch_TagFieldSetSeparator(self.inner, field_id, sperator as c_char);
+            if let Some(separator) = tag_options.tag_separator {
+                raw::RediSearch_TagFieldSetSeparator(self.inner, field_id, separator as c_char);
             }
             if tag_options.tag_case_sensitive {
                 raw::RediSearch_TagFieldSetCaseSensitive(
