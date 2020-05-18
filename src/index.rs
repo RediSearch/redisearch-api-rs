@@ -1,3 +1,4 @@
+use std::ffi::c_void;
 use std::ffi::{CStr, CString};
 use std::ptr;
 
@@ -6,15 +7,29 @@ use num_traits::ToPrimitive;
 use crate::raw::{self, RSFieldID, RSResultsIterator, GC_POLICY_FORK, GC_POLICY_NONE};
 use crate::{Document, FieldType};
 use redis_module::RedisError;
-use std::os::raw::c_char;
+use std::os::raw::{c_char, c_int};
+
+pub struct Field<'a> {
+    index: &'a Index,
+    field_id: RSFieldID,
+}
 
 pub struct Index {
     inner: *mut raw::RSIndex,
 }
 
-pub struct Field<'a> {
-    index: &'a Index,
-    field_id: RSFieldID,
+pub struct TagOptions {
+    tag_separator: Option<char>,
+    tag_case_sensitive: bool,
+}
+
+impl Default for TagOptions {
+    fn default() -> Self {
+        Self {
+            tag_separator: None,
+            tag_case_sensitive: false,
+        }
+    }
 }
 
 impl Index {
@@ -24,7 +39,7 @@ impl Index {
         Self { inner: index }
     }
 
-    pub fn create_with_options(name: &str, options: &IndexOptions) -> Self {
+    pub fn create_with_options(name: &str, options: IndexOptions) -> Self {
         let index_options =
             unsafe { raw::RediSearch_CreateIndexOptions().as_mut() }.expect("null IndexOptions");
 
@@ -38,7 +53,7 @@ impl Index {
         Self { inner: index }
     }
 
-    pub fn create_field(&self, name: &str) -> Field {
+    pub fn create_field(&self, name: &str, weight: f64, tag_options: TagOptions) -> Field {
         let name = CString::new(name).unwrap();
 
         // We want to let the document decide the type, so we support all types.
@@ -47,6 +62,19 @@ impl Index {
 
         let field_id =
             unsafe { raw::RediSearch_CreateField(self.inner, name.as_ptr(), ftype.bits, fopt) };
+        unsafe {
+            raw::RediSearch_TextFieldSetWeight(self.inner, field_id, weight);
+            if let Some(separator) = tag_options.tag_separator {
+                raw::RediSearch_TagFieldSetSeparator(self.inner, field_id, separator as c_char);
+            }
+            if tag_options.tag_case_sensitive {
+                raw::RediSearch_TagFieldSetCaseSensitive(
+                    self.inner,
+                    field_id,
+                    tag_options.tag_case_sensitive as c_int,
+                );
+            }
+        }
 
         Field {
             index: self,
@@ -66,6 +94,22 @@ impl Index {
 
         if status == redis_module::raw::REDISMODULE_ERR as i32 {
             Err(RedisError::Str("error adding document"))
+        } else {
+            Ok(())
+        }
+    }
+
+    pub fn del_document(&self, key: &str) -> Result<(), RedisError> {
+        let status = unsafe {
+            raw::RediSearch_DeleteDocument(
+                self.inner,
+                CString::new(key).unwrap().as_ptr() as *const c_void,
+                key.len(),
+            )
+        };
+
+        if status == redis_module::raw::REDISMODULE_ERR as i32 {
+            Err(RedisError::Str("error deleting document"))
         } else {
             Ok(())
         }

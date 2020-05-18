@@ -13,7 +13,7 @@ mod index;
 pub mod raw;
 
 pub use document::Document;
-pub use index::Index;
+pub use index::{Index, TagOptions};
 
 bitflags! {
     pub struct FieldType: u32 {

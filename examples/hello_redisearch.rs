@@ -2,7 +2,7 @@
 extern crate redis_module;
 
 use redis_module::{Context, NextArg, RedisError, RedisResult};
-use redisearch_api::{self, init, Document, FieldType, Index};
+use redisearch_api::{init, Document, FieldType, Index, TagOptions};
 
 fn hello_redisearch(_: &Context, args: Vec<String>) -> RedisResult {
     let mut args = args.into_iter().skip(1);
@@ -21,7 +21,7 @@ fn hello_redisearch(_: &Context, args: Vec<String>) -> RedisResult {
     let score = 1.0;
 
     let index = Index::create(index_name);
-    index.create_field(field_name);
+    index.create_field(field_name, 1.0, TagOptions::default());
 
     let doc = Document::create("doc1", score);
     doc.add_field(field_name, "bar", FieldType::FULLTEXT);
