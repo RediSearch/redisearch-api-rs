@@ -1,6 +1,6 @@
 [package]
 name = "redisearch_api"
-version = "0.4.1"
+version = "0.4.2"
 authors = ["Gavrie Philipson <gavrie@redislabs.com>", "Guy Korland <guy.korland@redislabs.com>"]
 edition = "2018"
 description = "Rust RediSearch API binding"
@@ -14,7 +14,7 @@ crate-type = ["cdylib"]
 
 
 [dependencies]
-redis-module = { version="0.9.1", features = ["experimental-api"]}
+redis-module = { version="0.9.2", features = ["experimental-api"]}
 bitflags = "1.1"
 libc = "0.2"
 time = "0.1"
@@ -22,7 +22,7 @@ enum-primitive-derive = "0.1.2"
 num-traits = "0.2.8"
 
 [build-dependencies]
-bindgen = "0.51"
+bindgen = "0.54"
 cmake = "0.1"
 
 [features]

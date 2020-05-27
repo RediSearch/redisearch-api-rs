@@ -1,3 +1,4 @@
+use std::convert::TryInto;
 use std::ffi::c_void;
 use std::ffi::{CStr, CString};
 use std::ptr;
@@ -104,7 +105,7 @@ impl Index {
             raw::RediSearch_DeleteDocument(
                 self.inner,
                 CString::new(key).unwrap().as_ptr() as *const c_void,
-                key.len(),
+                key.len().try_into().unwrap(),
             )
         };
 
@@ -123,7 +124,7 @@ impl Index {
             raw::RediSearch_IterateQuery(
                 self.inner,
                 c_query.as_ptr(),
-                query_string.len(),
+                query_string.len().try_into().unwrap(),
                 &mut err_ptr,
             )
         };
@@ -172,7 +173,7 @@ impl Iterator for ResultsIterator<'_> {
             // A null pointer means we have no results.
             return None;
         }
-        let mut len = 0usize;
+        let mut len = 0;
         let key = unsafe {
             let raw_key =
                 raw::RediSearch_ResultsIteratorNext(self.inner, self.index.inner, &mut len)
