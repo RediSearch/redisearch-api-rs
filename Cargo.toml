@@ -1,6 +1,6 @@
 [package]
 name = "redisearch_api"
-version = "0.4.2"
+version = "0.4.3"
 authors = ["Gavrie Philipson <gavrie@redislabs.com>", "Guy Korland <guy.korland@redislabs.com>"]
 edition = "2018"
 description = "Rust RediSearch API binding"
