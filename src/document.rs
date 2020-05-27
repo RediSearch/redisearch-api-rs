@@ -1,4 +1,3 @@
-use std::convert::TryInto;
 use std::ffi::CString;
 use std::os::raw::c_void;
 use std::ptr;
@@ -15,12 +14,7 @@ impl Document {
         let lang = ptr::null(); // Default language
 
         let doc = unsafe {
-            raw::RediSearch_CreateDocument(
-                c_key.as_ptr() as *const c_void,
-                key.len().try_into().unwrap(),
-                score,
-                lang,
-            )
+            raw::RediSearch_CreateDocument(c_key.as_ptr() as *const c_void, key.len(), score, lang)
         };
 
         Self { inner: doc }
@@ -34,7 +28,7 @@ impl Document {
                 self.inner,
                 name.as_ptr(),
                 c_value.as_ptr(),
-                value.len().try_into().unwrap(),
+                value.len(),
                 field_type.bits,
             );
         }

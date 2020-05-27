@@ -1,4 +1,3 @@
-use std::convert::TryInto;
 use std::ffi::c_void;
 use std::ffi::{CStr, CString};
 use std::ptr;
@@ -105,7 +104,7 @@ impl Index {
             raw::RediSearch_DeleteDocument(
                 self.inner,
                 CString::new(key).unwrap().as_ptr() as *const c_void,
-                key.len().try_into().unwrap(),
+                key.len(),
             )
         };
 
@@ -124,7 +123,7 @@ impl Index {
             raw::RediSearch_IterateQuery(
                 self.inner,
                 c_query.as_ptr(),
-                query_string.len().try_into().unwrap(),
+                query_string.len(),
                 &mut err_ptr,
             )
         };
