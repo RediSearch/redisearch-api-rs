@@ -172,7 +172,7 @@ impl Iterator for ResultsIterator<'_> {
             // A null pointer means we have no results.
             return None;
         }
-        let mut len = 0usize;
+        let mut len = 0;
         let key = unsafe {
             let raw_key =
                 raw::RediSearch_ResultsIteratorNext(self.inner, self.index.inner, &mut len)
