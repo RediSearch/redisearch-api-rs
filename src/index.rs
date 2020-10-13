@@ -129,12 +129,12 @@ impl Index {
         };
 
         if !err_ptr.is_null() {
-            let err = unsafe { CStr::from_ptr(err_ptr) }.to_str()?.to_owned();
+            let message = unsafe { CStr::from_ptr(err_ptr) }.to_str()?.to_owned();
 
             // FIXME: free() the err_ptr value.
             // This should be exposed from the RediSearch API. Talk to Meir.
 
-            return Err(err.into());
+            return Err(RedisError::String(message));
         }
 
         Ok(ResultsIterator::from_raw(results_iter, self)?)
