@@ -3,7 +3,7 @@
 [![CircleCI](https://circleci.com/gh/RediSearch/redisearch-api-rs/tree/master.svg?style=svg)](https://circleci.com/gh/RediSearch/redisearch-api-rs/tree/master)
 [![macos](https://github.com/RediSearch/redisearch-api-rs/workflows/macos/badge.svg)](https://github.com/RediSearch/redisearch-api-rs/actions?query=workflow%3Amacos)
 [![Forum](https://img.shields.io/badge/Forum-RediSearch-blue)](https://forum.redislabs.com/c/modules/redisearch/)
-[![Gitter](https://badges.gitter.im/RedisLabs/RediSearch.svg)](https://gitter.im/RedisLabs/RediSearch?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Discord](https://img.shields.io/discord/697882427875393627?style=flat-square)](https://discord.gg/xTbqgTB)
 
 # redisearch-api-rs
 
