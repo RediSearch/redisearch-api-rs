@@ -14,7 +14,7 @@ crate-type = ["cdylib"]
 
 
 [dependencies]
-redis-module = { version="0.11", features = ["experimental-api"]}
+redis-module = { version="0.12", features = ["experimental-api"]}
 bitflags = "1.1"
 libc = "0.2"
 time = "0.1"
