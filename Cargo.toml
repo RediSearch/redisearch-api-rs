@@ -22,7 +22,7 @@ enum-primitive-derive = "0.1.2"
 num-traits = "0.2.8"
 
 [build-dependencies]
-bindgen = "0.54"
+bindgen = "0.57.0"
 cmake = "0.1"
 
 [features]
