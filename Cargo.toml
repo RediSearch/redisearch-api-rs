@@ -23,7 +23,7 @@ num-traits = "0.2.8"
 
 [build-dependencies]
 bindgen = "0.57.0"
-cmake = "0.1"
+cmake = "0.1.45"
 
 [features]
 # Workaround to allow cfg(feature = "test") in redismodue-rs dependencies:
