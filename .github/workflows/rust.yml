@@ -34,7 +34,7 @@ jobs:
         usesh: true
         sync: rsync
         prepare: pkg install -y bash gmake rust git
-        run: >
+        run: |
           git submodule sync
           git submodule update --init
           rustup component add rustfmt
