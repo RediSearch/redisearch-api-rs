@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  build-mac:
 
     runs-on: macos-latest
 
@@ -33,7 +33,7 @@ jobs:
       with:
         usesh: true
         sync: rsync
-        prepare: pkg install -y bash gmake rust
+        prepare: pkg install -y bash gmake rust git
         run: >
           git submodule sync
           git submodule update --init
