@@ -33,7 +33,7 @@ jobs:
       with:
         usesh: true
         sync: rsync
-        prepare: pkg install -y bash gmake rust git clang
+        prepare: pkg install -y bash gmake rust git clang-devel
         run: |
           git submodule sync
           git submodule update --init
