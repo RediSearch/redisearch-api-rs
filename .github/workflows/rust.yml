@@ -23,3 +23,20 @@ jobs:
       run: cargo build --all --all-targets
     - name: Run tests
       run: cargo test --features test --all-targets
+      
+  build-freebsd:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: build
+      uses: vmactions/freebsd-vm@v0.1.2
+      with:
+        usesh: true
+        sync: rsync
+        prepare: pkg install -y bash gmake rust
+        run: >
+          git submodule sync
+          git submodule update --init
+          rustup component add rustfmt
+          cargo build --all --all-targets      
+          cargo test --features test --all-targets
