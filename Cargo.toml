@@ -14,7 +14,7 @@ crate-type = ["cdylib"]
 
 
 [dependencies]
-redis-module = { version="0.11", features = ["experimental-api"]}
+redis-module = { version="0.12", features = ["experimental-api"]}
 bitflags = "1.1"
 libc = "0.2"
 time = "0.1"
@@ -22,8 +22,8 @@ enum-primitive-derive = "0.1.2"
 num-traits = "0.2.8"
 
 [build-dependencies]
-bindgen = "0.54"
-cmake = "0.1"
+bindgen = "0.57"
+cmake = "0.1.45"
 
 [features]
 # Workaround to allow cfg(feature = "test") in redismodue-rs dependencies:
